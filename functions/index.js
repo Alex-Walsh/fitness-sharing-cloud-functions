@@ -40,6 +40,13 @@ app.get('/addworkout', (req,res) => {
 });
 
 
+app.get('/test', (req,res) => {
+  cors(req,res, () => {
+    return res.json({workouts: ["pushups", "squats", "crunches"]});
+  })
+});
+
+
 app.get('/signup',(req,res) => {
     cors(req,res, () => {
         console.log("new user signup request made");

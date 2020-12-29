@@ -18,7 +18,6 @@ admin.initializeApp({
 const app = express(); //to access express
 const db = admin.firestore(); //simplify access to firestore (the database)
 
-
 app.get("/getworkoutdata", (req,res) => {
   cors(req,res, () => {
     return res.json({reps: [1,2,3,4,5,6]});
@@ -63,6 +62,20 @@ app.post("/addworkout", (req, res) => {
     });
   return res.status(200).json({ status: 300 });
 });
+
+app.get('/getToken', (req,res) => {
+  cors(req,res, () => {
+    admin
+    .auth()
+    .createCustomToken(req.query.uid)
+    .then((token) => {
+      return res.json({token: token})
+    })
+//TODO: ERROR HANDLE  
+   
+  })
+})
+
 
 app.get("/getworkouts", (req, res) => {
   //TODO: Get workouts not owned by that user

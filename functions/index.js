@@ -7,7 +7,7 @@ const admin = require("firebase-admin");
 //express
 const express = require("express");
 //auth
-const auth = require("firebase-auth");
+//const auth = require("firebase-auth");
 const { Query } = require("@google-cloud/firestore");
 const { Console } = require("console");
 
@@ -18,9 +18,19 @@ admin.initializeApp({
 const app = express(); //to access express
 const db = admin.firestore(); //simplify access to firestore (the database)
 
-app.get("/getworkoutdata", (req,res) => {
+app.get("/getWorkoutData", (req,res) => {
   cors(req,res, () => {
-    return res.json({reps: [1,2,3,4,5,6]});
+    //TODO:AUTHENTICATE
+    db.collection("userworkouts").doc(req.query.workoutid)
+    .get()
+    .then((doc) => {
+      //TODO: RETURN STATUS
+      console.log(doc.data());
+      return res.json({data: doc.data()});
+    }).catch((err) => {
+      console.log(err);
+      return res.json({error:err});
+    })
   });
 });
 
@@ -70,6 +80,9 @@ app.get('/getToken', (req,res) => {
     .createCustomToken(req.query.uid)
     .then((token) => {
       return res.json({token: token})
+    })
+    .catch((err) => {
+      console.log(err);
     })
 //TODO: ERROR HANDLE  
    
